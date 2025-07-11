@@ -1,0 +1,2028 @@
+{
+  "name": "Video Ad script generator",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "ai-vsl",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        340,
+        800
+      ],
+      "id": "ddb1694a-6e63-45e1-99e0-974a31c9807c",
+      "name": "Webhook",
+      "webhookId": "b4956976-e25a-4059-9927-d85ff8f2a4cb"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eddee505-29e2-48b9-896a-d5e3cfde89f5",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "generateProjectDetails",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Generate Project Details"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "generateAngles",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "bb5b6fd5-ef22-451b-a23d-258044aafcca"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Generate Angles"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ac785a02-782f-4af2-af20-bb23cf885a71",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "generateScript",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Generate Script"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0ab60fd9-c2a2-4e7d-81dc-07737b2f95dc",
+                    "leftValue": "={{ $json.query.action }}",
+                    "rightValue": "feedbackIteration",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Feedback Iteration"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        600,
+        780
+      ],
+      "id": "01979a99-bf84-46d5-adb2-f9997aff8321",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "64113609-6adf-4693-8d51-ede088d97d38",
+              "name": "userprompt",
+              "value": "=Research about the Customer Profile in very detailed manner for the product, what exactly are the products & the description the core people who need the product. Unique insights &\n\nProduct Name: {{ $json['Product Name'] }}\n\nProduct Description: {{ $json['Product Notes'] }}\n\nAlso go into rabbithole and absolutely understand the what and who they are selling to, get details on the product the ingredients, and everything along with their brand narrative, what they are and what they are not. Be specific about the details.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        60
+      ],
+      "id": "fbfb128c-9f0f-4bfe-9e05-22a4e4b05f8c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Angle Headline: {{ $json.AngleHeadline }}\n-----\nConcept Summary: {{ $json.ConceptSummary }}\n-----\nVSL Structure Overview: {{ $json.VSLStructure }}\n-----\nVideo Suggestion: {{ $json.VideoSuggestion }}\n-----\nEmotional Triggers: {{ $json.EmotionalTriggers }}\n----\nCognative Bias: {{ $json.CognitiveBiasesLeveraged }}\n----\nDirect Response Techniques: {{ $json['Direct Response Techniques'] }}\n----\nTime: {{ $json.Time }}\n\n----\nAbout the product: {{ $json['About Product'][0] }}\n\n----\nGive me a script considering from all of the above information.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an elite video sales letter (VSL) scriptwriter, specially trained and highly experienced in crafting psychologically persuasive, direct-response marketing content optimized specifically for social media (particularly Facebook advertising). Your scripts blend proven storytelling formulas, emotional intensity, persuasive psychological triggers, and seamless conversational delivery to instantly captivate the audience, hold sustained attention, and compel immediate action and conversions.\n\nYou will receive clearly structured information from a provided VSL creative brief, specifically containing these key elements:\n\n- **Idea (Angle Headline):** The central \"big idea\" or winning angle for your script.\n- **Description:** A Markdown-formatted detailed breakdown of the angle, including potential visual hooks, emotional cues, persuasive messaging strategies, and explicit psychological techniques to employ.\n- **Audience & Psychological Insight:** Data and guidance about the ideal audience profile, core emotions, desires, fears, or objections to leverage within the script for maximum conversion power.\n\nYour job is to use this information to produce a complete and polished VSL script following this exact format and clearly labeled structure:\n\n### VSL Script Required Structure:\n\n**1. HOOK (0-10 seconds):**\n\n- Craft an instantly gripping, scroll-stopping opening sentence.  \n- Use powerful psychological triggers: provocative questions, shocking statistics, curiosity-building statements, contrarian claims, empathy-driven problems, or impactful visual concepts directly relevant to your viewer’s deepest desires or fears.\n- Set an emotional tone immediately, speaking directly to the viewer from the first second.\n\n**2. LEAD / PROBLEM AGITATION (10-30 seconds):**\n\n- Smoothly transition from your hook into clearly defining and magnifying the viewer’s core problem or pain points—make sure these feel personal, specific, relatable, emotionally charged, and urgent.\n- Skillfully amplify the viewer’s emotional discomfort, vividly painting the negative consequences or future scenarios of ignoring this problem.\n- Subtly hint towards a revolutionary or intriguing solution without revealing your product explicitly yet, building curiosity.\n\n**3. BODY / SOLUTION PRESENTATION (30 seconds–2 minutes):**\n\n- Gracefully and believably introduce your product without blatant, immediate promotion. Frame it as the unique and perfect solution effortlessly connected to the viewer’s exact struggles, fears, and desires previously outlined.\n- Clearly explain the unique mechanism or features of the product in conversational, easy-to-understand language without jargon.\n- Clearly establish credibility: Incorporate persuasive social proof (realistic testimonials, short stories, transformational \"before-and-afters\"), simple readable statistics, scientific backing, or authoritative figures as proof of results. Always maintain believable language and avoid exaggerated claims.\n- Address and devastate potential common viewer objections clearly but conversationally, embedding reassurance, empathy and building trust.\n- Emphasize clearly how your product uniquely and importantly differs from competitor options, emphasizing meaningful emotional and logical advantages in the viewer’s specific context.\n\n**4. CALL-TO-ACTION (15–30 seconds):**\n\n- Provide a crystal-clear, powerfully persuasive directive (“Click below,” “Claim your discount today,” etc.).\n- Clearly articulate your risk removal (guarantee or refund policy) and urgency/scarcity messaging (limited availability, limited time offer, exclusive discounts, etc.) to maximize likelihood of immediate action.\n- Remind viewers specifically and vividly about the primary transformation or benefit they'll obtain by responding immediately, triggering emotional and logical motivators simultaneously.\n- Use explicit action-oriented, imperative language: “Click,” “Claim,” “Start,” “Secure,” “Order,” etc.\n\n### Essential Script Requirements & Instructions:\n\n- **Emotional Persuasion:** The script must clearly demonstrate mastery of persuasive techniques grounded in deep emotional and psychological understanding. You should leverage consumer fears, hopes, insecurities, aspirations, biases (loss aversion, scarcity, urgency, authority, social proof) and subconscious drivers explicitly outlined in your provided brief description.\n- **Conversational Tone & Flow:** Maintain an intimate, conversational, easy-to-understand, engaging, and friendly style of communication. Speak directly to viewers, always directly addressing “you,” as if having an intimate, honest conversation with a close trusted friend.\n- **Concise & Focused:** Every single sentence or phrase must be meaningful, driving interest or persuasion forward. Avoid fluff and vague language.\n- **Visual & Narrative Awareness:** Explicitly consider moments where visuals or storytelling elements (which the video creator may show on screen) would strongly amplify the message. Employ vivid verbal imagery and emotional appeals even though visuals aren't explicitly your responsibility.\n- **Facebook Ad Context:** Ensure your approach respects the context of Facebook ads—captivating immediately, holding short attention spans, emotionally charged, and clearly and urgently actionable.\n- **Ethical Persuasion:** Your persuasive and psychological techniques, however bold, must remain ethically responsible, tastefully executed, and plausible in their claims—avoiding unrealistic hype, false promises, or misleading assertions. Conversion rates come from trust and authenticity.\n\nYour final deliverable should explicitly label each structural component (HOOK, LEAD, BODY, CTA) clearly. You should construct the script in Markdown formatting for clarity and readability. Your response should start immediately with the script with NO intro statement. \n\nBy executing these explicit detailed guidelines, your produced scripts should consistently maximize viewer engagement, create intense emotional resonance, immediately remove common objections or hesitations, trigger powerful subconscious motivators, ethically persuade prospects, and drive immediate, measurable increases in direct-response sales conversions."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1600,
+        840
+      ],
+      "id": "109569df-f435-4f15-8a2f-35aea00ac4eb",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Feedbacks:\n{{ $json.Feedback }}\n=====\n\nScript:\n{{ $json.Script }}\n\n\n====\nSome Context:\n{{ $json.ConceptSummary }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an expert Video Sales Letter (VSL) scriptwriter specializing in creating highly converting VSL ads. Your task is to rewrite an existing VSL script based on the feedback provided. You will be given:\n\n1. **Original Script:** The current version of the VSL script.\n2. **Feedback:** Specific instructions, suggestions, or criticisms on how the script should be improved.\n3. **Additional Context:** Relevant details about the product, target audience, tone, or objectives that will help you better implement the feedback.\n\nUse the feedback and additional context to enhance the original script, ensuring it is engaging, persuasive, and optimized for high conversion rates. Your rewrite should clearly address each feedback point provided, improving clarity, impact, emotional resonance, and overall effectiveness."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1640,
+        1280
+      ],
+      "id": "2a400eed-7542-43a2-935f-8d7892338575",
+      "name": "Basic LLM Chain2"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        1060
+      ],
+      "id": "f00fc98d-1818-4cbe-b52e-d06407d7c3a7",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zhrZhlkAfCqokeRK",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        1520
+      ],
+      "id": "3135c9e4-6acc-4060-a280-17d050390263",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zhrZhlkAfCqokeRK",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblTufVXzuUUvsqnD",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tblTufVXzuUUvsqnD"
+        },
+        "id": "={{ $json['Airtable Id'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1260,
+        60
+      ],
+      "id": "936a261b-99d2-4736-ba1d-6ce53d18468b",
+      "name": "Get Product",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblTufVXzuUUvsqnD",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tblTufVXzuUUvsqnD"
+        },
+        "id": "={{ $json['Airtable Id'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        480
+      ],
+      "id": "18e166f9-979b-4193-81d4-00302d751e45",
+      "name": "Get Product1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0ynpBwH6r97TNN",
+          "mode": "list",
+          "cachedResultName": "Scripting",
+          "cachedResultUrl": "https://airtable.com/appsvPpfVc00sZlRR/tbl0ynpBwH6r97TNN"
+        },
+        "id": "={{ $json['Airtable Id'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1300,
+        840
+      ],
+      "id": "4986c040-07fb-4e9a-a156-3af631366616",
+      "name": "Get Script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0ynpBwH6r97TNN",
+          "mode": "list",
+          "cachedResultName": "Scripting",
+          "cachedResultUrl": "https://airtable.com/appsvPpfVc00sZlRR/tbl0ynpBwH6r97TNN"
+        },
+        "id": "={{ $json['Airtable Id'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1320,
+        1280
+      ],
+      "id": "bd9088d8-2a3c-4509-8264-0ad2a1aec011",
+      "name": "Get Script1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblTufVXzuUUvsqnD",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tblTufVXzuUUvsqnD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields1').item.json['Airtable Id'] }}",
+            "Product Details": "={{ $json.text }}",
+            "Status": "Product Details Generated"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product Notes",
+              "displayName": "Product Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Idle",
+                  "value": "Idle"
+                },
+                {
+                  "name": "Generating Product Details",
+                  "value": "Generating Product Details"
+                },
+                {
+                  "name": "Generating Angles",
+                  "value": "Generating Angles"
+                },
+                {
+                  "name": "Product Details Generated",
+                  "value": "Product Details Generated"
+                },
+                {
+                  "name": "Angles Generated",
+                  "value": "Angles Generated"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Product Details",
+              "displayName": "Product Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "1️⃣ Generate Product Details",
+              "displayName": "1️⃣ Generate Product Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "2️⃣ Generate Angles",
+              "displayName": "2️⃣ Generate Angles",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Winning Ad Script",
+              "displayName": "Winning Ad Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Step 1",
+              "displayName": "Step 1",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Step 2",
+              "displayName": "Step 2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Projects",
+              "displayName": "Projects",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Scripting",
+              "displayName": "Scripting",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Angle Headline",
+              "displayName": "Angle Headline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Ads Performance",
+              "displayName": "Ads Performance",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2320,
+        60
+      ],
+      "id": "4218f0e0-b183-4dc0-8b94-659b43f35989",
+      "name": "Update Product Details",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0ynpBwH6r97TNN",
+          "mode": "list",
+          "cachedResultName": "Scripting",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tbl0ynpBwH6r97TNN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "5️⃣ Generate Script": false,
+            "Shortlist": false,
+            "AngleHeadline": "={{ $json.AngleHeadline }}",
+            "ConceptSummary": "={{ $json.ConceptSummary }}",
+            "VSLStructure": "={{ $json.VSLStructure }}",
+            "VideoSuggestion": "={{ $json.VideoSuggestion }}",
+            "Direct Response Techniques": "={{ $json.DirectResponseTechniques }}",
+            "EmotionalTriggers": "={{ $json.EmotionalTriggers }}",
+            "CognitiveBiasesLeveraged": "={{ $json.CognitiveBiasesLeveraged }}",
+            "Status": "Idle",
+            "Product": "={{ $('Get Product1').item.json['Product Name'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "AngleHeadline",
+              "displayName": "AngleHeadline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "ConceptSummary",
+              "displayName": "ConceptSummary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "VSLStructure",
+              "displayName": "VSLStructure",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "VideoSuggestion",
+              "displayName": "VideoSuggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "EmotionalTriggers",
+              "displayName": "EmotionalTriggers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CognitiveBiasesLeveraged",
+              "displayName": "CognitiveBiasesLeveraged",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Direct Response Techniques",
+              "displayName": "Direct Response Techniques",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "3️⃣ Select Script Length",
+              "displayName": "3️⃣ Select Script Length",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "< 1 min",
+                  "value": "< 1 min"
+                },
+                {
+                  "name": "1-3 mins",
+                  "value": "1-3 mins"
+                },
+                {
+                  "name": "3-5 mins",
+                  "value": "3-5 mins"
+                },
+                {
+                  "name": "5-7 mins",
+                  "value": "5-7 mins"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "4️⃣ Feedback",
+              "displayName": "4️⃣ Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Idle",
+                  "value": "Idle"
+                },
+                {
+                  "name": "Generating Script",
+                  "value": "Generating Script"
+                },
+                {
+                  "name": "Revision in progress",
+                  "value": "Revision in progress"
+                },
+                {
+                  "name": "Script Generated",
+                  "value": "Script Generated"
+                },
+                {
+                  "name": "Script Revised",
+                  "value": "Script Revised"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Script",
+              "displayName": "Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "About Product",
+              "displayName": "About Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Records (Nested)",
+              "displayName": "Records (Nested)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "5️⃣ Generate Script",
+              "displayName": "5️⃣ Generate Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Shortlist",
+              "displayName": "Shortlist",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2200,
+        480
+      ],
+      "id": "6e6b28e6-3006-4e36-98f7-89e40647c433",
+      "name": "Create Angles",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblTufVXzuUUvsqnD",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tblTufVXzuUUvsqnD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields1').item.json['Airtable Id'] }}",
+            "Status": "Angles Generated",
+            "2️⃣ Generate Angles": false
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Product Name",
+              "displayName": "Product Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Product Notes",
+              "displayName": "Product Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Idle",
+                  "value": "Idle"
+                },
+                {
+                  "name": "Generating Product Details",
+                  "value": "Generating Product Details"
+                },
+                {
+                  "name": "Generating Angles",
+                  "value": "Generating Angles"
+                },
+                {
+                  "name": "Product Details Generated",
+                  "value": "Product Details Generated"
+                },
+                {
+                  "name": "Angles Generated",
+                  "value": "Angles Generated"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Product Details",
+              "displayName": "Product Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "1️⃣ Generate Product Details",
+              "displayName": "1️⃣ Generate Product Details",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "2️⃣ Generate Angles",
+              "displayName": "2️⃣ Generate Angles",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Winning Ad Script",
+              "displayName": "Winning Ad Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Step 1",
+              "displayName": "Step 1",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Step 2",
+              "displayName": "Step 2",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Projects",
+              "displayName": "Projects",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Scripting",
+              "displayName": "Scripting",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Angle Headline",
+              "displayName": "Angle Headline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Ads Performance",
+              "displayName": "Ads Performance",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2420,
+        480
+      ],
+      "id": "b4a670b5-6f6d-43ad-9f70-b35535a6b3c9",
+      "name": "Update Product",
+      "executeOnce": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0ynpBwH6r97TNN",
+          "mode": "list",
+          "cachedResultName": "Scripting",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tbl0ynpBwH6r97TNN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "5️⃣ Generate Script": false,
+            "Shortlist": true,
+            "id": "={{ $('Edit Fields1').item.json['Airtable Id'] }}",
+            "Status": "Script Generated",
+            "Script": "={{ $json.text }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "AngleHeadline",
+              "displayName": "AngleHeadline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ConceptSummary",
+              "displayName": "ConceptSummary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "VSLStructure",
+              "displayName": "VSLStructure",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "VideoSuggestion",
+              "displayName": "VideoSuggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "EmotionalTriggers",
+              "displayName": "EmotionalTriggers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "CognitiveBiasesLeveraged",
+              "displayName": "CognitiveBiasesLeveraged",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Direct Response Techniques",
+              "displayName": "Direct Response Techniques",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "3️⃣ Select Script Length",
+              "displayName": "3️⃣ Select Script Length",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "< 1 min",
+                  "value": "< 1 min"
+                },
+                {
+                  "name": "1-3 mins",
+                  "value": "1-3 mins"
+                },
+                {
+                  "name": "3-5 mins",
+                  "value": "3-5 mins"
+                },
+                {
+                  "name": "5-7 mins",
+                  "value": "5-7 mins"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "4️⃣ Feedback",
+              "displayName": "4️⃣ Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Idle",
+                  "value": "Idle"
+                },
+                {
+                  "name": "Generating Script",
+                  "value": "Generating Script"
+                },
+                {
+                  "name": "Revision in progress",
+                  "value": "Revision in progress"
+                },
+                {
+                  "name": "Script Generated",
+                  "value": "Script Generated"
+                },
+                {
+                  "name": "Script Revised",
+                  "value": "Script Revised"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Script",
+              "displayName": "Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "About Product",
+              "displayName": "About Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "5️⃣ Generate Script",
+              "displayName": "5️⃣ Generate Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Shortlist",
+              "displayName": "Shortlist",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Records (Nested)",
+              "displayName": "Records (Nested)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2020,
+        840
+      ],
+      "id": "158cc82a-6f9d-42eb-8ccd-ab7568372b9c",
+      "name": "Update Script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appFqHhvUM886rFIA",
+          "mode": "list",
+          "cachedResultName": "VSL Ad Agency (Rapple Media)",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0ynpBwH6r97TNN",
+          "mode": "list",
+          "cachedResultName": "Scripting",
+          "cachedResultUrl": "https://airtable.com/appFqHhvUM886rFIA/tbl0ynpBwH6r97TNN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields1').item.json['Airtable Id'] }}",
+            "Script": "={{ $json.text }}",
+            "Status": "Script Revised",
+            "5️⃣ Generate Script": false
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "AngleHeadline",
+              "displayName": "AngleHeadline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "ConceptSummary",
+              "displayName": "ConceptSummary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "VSLStructure",
+              "displayName": "VSLStructure",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "VideoSuggestion",
+              "displayName": "VideoSuggestion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "EmotionalTriggers",
+              "displayName": "EmotionalTriggers",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "CognitiveBiasesLeveraged",
+              "displayName": "CognitiveBiasesLeveraged",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Direct Response Techniques",
+              "displayName": "Direct Response Techniques",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "3️⃣ Select Script Length",
+              "displayName": "3️⃣ Select Script Length",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "< 1 min",
+                  "value": "< 1 min"
+                },
+                {
+                  "name": "1-3 mins",
+                  "value": "1-3 mins"
+                },
+                {
+                  "name": "3-5 mins",
+                  "value": "3-5 mins"
+                },
+                {
+                  "name": "5-7 mins",
+                  "value": "5-7 mins"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "4️⃣ Feedback",
+              "displayName": "4️⃣ Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Idle",
+                  "value": "Idle"
+                },
+                {
+                  "name": "Generating Script",
+                  "value": "Generating Script"
+                },
+                {
+                  "name": "Revision in progress",
+                  "value": "Revision in progress"
+                },
+                {
+                  "name": "Script Generated",
+                  "value": "Script Generated"
+                },
+                {
+                  "name": "Script Revised",
+                  "value": "Script Revised"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Script",
+              "displayName": "Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Product",
+              "displayName": "Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "About Product",
+              "displayName": "About Product",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "5️⃣ Generate Script",
+              "displayName": "5️⃣ Generate Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Shortlist",
+              "displayName": "Shortlist",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Records (Nested)",
+              "displayName": "Records (Nested)",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        2120,
+        1280
+      ],
+      "id": "24e707f9-5184-4f62-b6e1-dbfb2971550a",
+      "name": "Update Script1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "naXmGRrHgy7Fokxn",
+          "name": "N8N x Airtable"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Product Name: {{ $json['Product Name'] }}\n-----\nProduct Research Details: {{ $json['Product Details'] }}\n----\nProduct Notes: {{ $json['Product Notes'] }}\n\n-----\nWinning Scripts: {{ $json[\"Winning Ad Script\"].map((script, index) => `Script ${index + 1}: ${script}`).join(\"\\n\") }}\n\n\n\n----\nHere are the angles you've already created that works use them as inspiration, and give the output by analysing what angles work and then output in structured JSON:\n{{ $json['Angle Headline'] }}\n==========\n\nUsing all this data give me 5-8 ideas in specified schema. DON'T GIVE ANY PREFIX OR SUFFIX JUST ARRAY OF 5-8 OBJECTS WITH SPECIFIC KEYS, DON'T WRAP THE OUTPUT IN ``` or ANYTHING PURE CODE",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a world-class advertising copywriter specializing exclusively in crafting high-performing Video Sales Letter (VSL) scripts designed for impactful, direct-response digital marketing. Your sole mission is turning ordinary products into irresistible offers through story-driven psychological persuasion, emotional resonance, and highly compelling, click-inducing angles aimed at maximizing conversions.\n\nYour deep expertise involves understanding human psychology, consumer fears, desires, skepticism, biases, and emotions intimately. You masterfully apply frameworks proven to convert, such as Problem-Agitate-Solution (PAS), Before-After-Bridge (BAB), Story-Based Selling, Contrarian Myth-Busting, Fear-of-Missing-Out (FOMO), and powerful social proof or credibility elements. You're particularly skillful at navigating delicate, sensitive, or even darker psychological territories ethically but persuasively—boldly leveraging audience desires, anxieties, insecurities, and subconscious motivators to immediately grab attention, build trust, drive deep desire, and compel instant action.\n\nWhen provided with details about a product, your task is to generate a collection of at least 5 (and up to 8) distinctively original, high-quality, and conversion-driven VSL concept angles. Each VSL Angle must include:\n\n> AngleHeadline:\nAn eye-catching, curiosity-inducing hook that feels impossible to scroll past.\n\n> ConceptSummary:\nClearly outline the overarching creative strategy, psychological lever, and key selling point behind this angle. Explain exactly why it taps into the viewer’s core emotions, desires, or fears to drive urgency, curiosity, and ultimately conversions.\n\n> VSLStructure:\nBriefly describe how the VSL should unfold, including attention-grabbing hook/lead, clear framing of the customer's specific struggles, agitation methods (stories, statistics, hidden truths, or common myths), credible authority demonstrations or convincing proof-based narratives, seamless introduction of the solution, and strong, actionable calls-to-action.\n\n> VideoSuggestion:\nProvide potential visual themes, scenes, or references (briefly) that could support the narrative and enhance the emotional effectiveness of the message. Describe elements like settings, characters, storytelling visuals, social proof placement, or demonstrations that can visually strengthen psychological persuasion points.\n\n> EmotionalTriggers:\nBriefly list explicitly the psychological levers, emotional triggers (e.g., fear, hope, envy, social status, anxiety relief), in pointers and brief description.\n\n> CognitiveBiasesLeveraged\nBriefly list explicitly the cognitive biases (authority bias, scarcity principle, loss aversion, confirmation bias, social proof, sunk-cost fallacy), and subconscious motivators you will leverage for impeccable persuasive impact.\n\n\n> DirectResponseTechniques:\nClearly explain how proven direct-response strategies (urgency, scarcity, risk reversals, powerful guarantees, instant benefits, exclusivity, etc.) are woven into the VSL angle to drive immediate viewer action and conversions.\n\nThe output format is exactly (keys) like this:\n[{\n\"AngleHeadline\": \"String mostly 1 liner the headline\",\n\"ConceptSummary\": \"String, expressive and articulate\",\n\"VSLStructure\": \"String, markdown if required descriptive\",\n\"VideoSuggestion\" \"String, Provide potential visual themes, scenes, or references (briefly)\",\n\"EmotionalTriggers\": \"String, descriptive can be in markdown format\",\nCognitiveBiasesLeveraged: \"String, descriptive explanation of the cognitive biases utilized\",\n\"DirectResponseTechniques\": \"String, descriptive\"\n}]\n\n\nYou are free and encouraged to creatively explore emotionally powerful, bold, and daring messaging angles, while ensuring the concepts are tasteful and ethically defensible. Assume prospects will see these VSLs as social media ads, so each idea must be instantly engaging, appealing, easy to comprehend, credibility-boosting, and highly compelling within the first seconds of viewing.\n\nWhen the user provides a product name and details, you must respond with your output formatted as an easily readable JSON array. Each unique sales angle should be structured as a self-contained JSON object that precisely follows the schema described above.\n\nYour outputs should empower advertisers to immediately recognize why each concept stands to significantly outperform conventional scripts in terms of engagement, emotional connection, memorability, and most importantly—conversion rates."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1540,
+        480
+      ],
+      "id": "a975d6cb-220f-4326-b8b5-c433ae6c5977",
+      "name": "Generate Angles"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        240
+      ],
+      "id": "fd09d4f0-5643-45db-aa14-810fc3accece",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zhrZhlkAfCqokeRK",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userprompt }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1900,
+        60
+      ],
+      "id": "1c7941dc-ff59-4092-8a64-32180138444c",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        700
+      ],
+      "id": "b236d628-be72-4d59-9b87-dd7932aa645c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "zhrZhlkAfCqokeRK",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// N8N Function Node Code - Fixed Version\n// This handles multiple possible input data structures\n\n// Helper function to parse bullet points into array\nfunction parseBulletPoints(text) {\n  if (!text || typeof text !== 'string') return [];\n  \n  // Split by lines and filter for bullet points\n  const lines = text.split('\\n');\n  const bullets = [];\n  \n  for (let line of lines) {\n    line = line.trim();\n    if (line.startsWith('*') || line.startsWith('-') || line.startsWith('•')) {\n      bullets.push(line.replace(/^[\\*\\-•]\\s*/, '').trim());\n    } else if (line.match(/^\\d+\\.\\s/)) {\n      bullets.push(line.replace(/^\\d+\\.\\s*/, '').trim());\n    }\n  }\n  \n  return bullets.filter(b => b.length > 0);\n}\n\n// Helper function to safely get value from multiple possible locations\nfunction getValue(data, ...keys) {\n  for (let key of keys) {\n    if (data && data[key] !== undefined && data[key] !== null && data[key] !== '') {\n      return data[key];\n    }\n  }\n  return \"\";\n}\n\n// Get the input data - handle the specific structure from your input\nlet data;\nlet rawInput;\n\n// Log everything to debug\nconsole.log('Full $input object:', JSON.stringify($input, null, 2));\n\n// Get the raw input data\nif ($input.item && $input.item.json) {\n  rawInput = $input.item.json;\n} else if ($input.json) {\n  rawInput = $input.json;\n} else {\n  rawInput = $input;\n}\n\nconsole.log('Raw input:', JSON.stringify(rawInput, null, 2));\n\n// Handle the case where data is in a 'text' field containing JSON string\nif (rawInput.text) {\n  try {\n    // Parse the JSON string from the text field\n    const textContent = rawInput.text;\n    \n    // Remove markdown code block markers if present\n    const cleanedText = textContent.replace(/```json\\n?/g, '').replace(/```\\n?/g, '');\n    \n    // Parse the JSON\n    const parsedArray = JSON.parse(cleanedText);\n    \n    // Since it's an array, we'll process the first item\n    if (Array.isArray(parsedArray) && parsedArray.length > 0) {\n      data = parsedArray[0]; // Take the first item from the array\n      console.log('Parsed data from text field, using first array item');\n    } else {\n      data = parsedArray;\n      console.log('Parsed data from text field');\n    }\n  } catch (error) {\n    console.error('Error parsing JSON from text field:', error);\n    data = {};\n  }\n} else {\n  // Fallback to original logic\n  data = rawInput;\n  console.log('Using raw input directly');\n}\n\nconsole.log('Final data object to process:', JSON.stringify(data, null, 2));\n\n// Transform the data with multiple key variations\nconst result = {\n  AngleHeadline: getValue(data, 'AngleHeadline', 'angleHeadline', 'angle_headline', 'Angle Headline'),\n  ConceptSummary: getValue(data, 'ConceptSummary', 'conceptSummary', 'concept_summary', 'Concept Summary'),\n  VSLStructure: getValue(data, 'VSLStructure', 'vslStructure', 'vsl_structure', 'VSL Structure'),\n  VideoSuggestion: getValue(data, 'VideoSuggestion', 'videoSuggestion', 'video_suggestion', 'Video Suggestion'),\n  EmotionalTriggers: \"\",\n  CognitiveBiasesLeveraged: \"\",\n  DirectResponseTechniques: getValue(data, 'DirectResponseTechniques', 'directResponseTechniques', 'direct_response_techniques', 'Direct Response Techniques')\n};\n\n// Handle EmotionalTriggers with multiple key variations - convert to string\nconst emotionalTriggersRaw = getValue(data, 'EmotionalTriggers', 'emotionalTriggers', 'emotional_triggers', 'Emotional Triggers');\nif (emotionalTriggersRaw) {\n  if (Array.isArray(emotionalTriggersRaw)) {\n    // Join array elements with newlines or commas\n    result.EmotionalTriggers = emotionalTriggersRaw.join('\\n');\n  } else if (typeof emotionalTriggersRaw === 'string') {\n    // If it's already a string with bullet points, clean it up\n    const bullets = parseBulletPoints(emotionalTriggersRaw);\n    result.EmotionalTriggers = bullets.length > 0 ? bullets.join('\\n') : emotionalTriggersRaw;\n  }\n}\n\n// Handle CognitiveBiasesLeveraged with multiple key variations - convert to string\nconst cognitiveBiasesRaw = getValue(data, 'CognitiveBiasesLeveraged', 'cognitiveBiasesLeveraged', 'cognitive_biases_leveraged', 'Cognitive Biases Leveraged');\nif (cognitiveBiasesRaw) {\n  if (Array.isArray(cognitiveBiasesRaw)) {\n    // Join array elements with newlines or commas\n    result.CognitiveBiasesLeveraged = cognitiveBiasesRaw.join('\\n');\n  } else if (typeof cognitiveBiasesRaw === 'string') {\n    // If it's already a string with bullet points, clean it up\n    const bullets = parseBulletPoints(cognitiveBiasesRaw);\n    result.CognitiveBiasesLeveraged = bullets.length > 0 ? bullets.join('\\n') : cognitiveBiasesRaw;\n  }\n}\n\nconsole.log('Final transformed result:', JSON.stringify(result, null, 2));\n\n// Return the result\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1940,
+        480
+      ],
+      "id": "356f75f5-4911-460d-ac35-0446f983adf0",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "content": "## This Work's  ##\n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/sticky-notes/)",
+        "height": 1680,
+        "width": 2960,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "319ba004-2edc-4005-927c-06004573f9c1",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.benai.agency",
+            "user-agent": "Mozilla/5.0 (compatible; AirtableScripting; +https://airtable.com/developers/scripting;)",
+            "accept": "*/*",
+            "accept-encoding": "gzip,deflate",
+            "x-airtable-source": "appsvPpfVc00sZlRR/wflyXZTAaIa3vGjz3",
+            "x-forwarded-for": "54.196.43.104",
+            "x-forwarded-host": "n8n.benai.agency",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "4f7a0fd81c9f",
+            "x-real-ip": "54.196.43.104"
+          },
+          "params": {},
+          "query": {
+            "recordId": "recqBmpY06VnRHPwn",
+            "action": "generateAngles"
+          },
+          "body": {},
+          "webhookUrl": "https://n8n.benai.agency/webhook/ai-vsl",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Get Product": [
+      {
+        "json": {
+          "id": "recTZFS330f4pp66m",
+          "createdTime": "2025-07-01T03:19:06.000Z",
+          "Product Name": "Solar panel",
+          "Product Notes": "To generate  electricity\n",
+          "Status": "Idle",
+          "Product Details": "\n",
+          "Step 1": {
+            "label": "Generate Product Details",
+            "url": "https://airtable.com/tblTufVXzuUUvsqnD/recTZFS330f4pp66m?blocks=bli0SlMRV3EpgmpRz"
+          },
+          "Step 2": {
+            "label": "Generate Angle",
+            "url": "https://airtable.com/tblTufVXzuUUvsqnD/recTZFS330f4pp66m?blocks=bli82gQEAvi9pcs0N"
+          },
+          "1️⃣ Generate Product Details": true,
+          "Projects": [
+            "recWlfyyamDV9OfWF"
+          ]
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get Product",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Product1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Script",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Script1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Update Script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain2": {
+      "main": [
+        [
+          {
+            "node": "Update Script1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Product": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Product1": {
+      "main": [
+        [
+          {
+            "node": "Generate Angles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Script": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Script1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Angles": {
+      "main": [
+        [
+          {
+            "node": "Update Product",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Angles": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Update Product Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Angles",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Create Angles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "529708eb-8e01-4977-9e08-6b1d28770e5c",
+  "meta": {
+    "instanceId": "77f1d8375380ee2bc4995763b4e39528bf040d446fc3e9e5f6d802ec19784049"
+  },
+  "id": "YmV4Np5kFHVxqzwn",
+  "tags": []
+}
